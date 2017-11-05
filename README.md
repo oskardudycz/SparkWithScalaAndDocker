@@ -4,7 +4,7 @@ Project shows how to do simplest lines count in Spark
 
 Code is placed in [/src/main/scala/](https://github.com/oskardudycz/SparkWithScalaAndDocker/blob/master/src/src/main/scala/FileLinesCount.scala)
 
-```
+```scala
 package sparkWithScalaAndDocker
 
 import org.apache.spark.{SparkContext, SparkConf}
