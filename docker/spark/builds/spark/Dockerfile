@@ -35,8 +35,21 @@ ENV SPARK_HOME /usr/local/spark-2.2.0-bin-hadoop2.7
 ENV PATH $PATH:${SPARK_HOME}/bin
 RUN curl -s ${SPARK_ARCHIVE} | tar -xz -C /usr/local/
 
-
 # Add a /app volume
 VOLUME ["/app"]
+
+
+# Add postgres to classpath
+RUN \
+  cd /app \
+  wget http://central.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar
+
+  
+RUN \
+  cd /usr/local/spark-2.2.0-bin-hadoop2.7/bin \
+  wget http://central.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar
+
+ENV CLASSPATH $CLASSPATH:/app/postgresql-42.1.4.jar
+
  
 WORKDIR $SPARK_HOME
