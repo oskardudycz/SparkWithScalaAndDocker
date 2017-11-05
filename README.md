@@ -23,7 +23,7 @@ object FileLinesCount {
 }
 ```
 
-On bash:
+Open cmd/shell:
 1. Run `init` to start docker.
 2. Run `build` to build project.
 3. Run `run` to run project in Spark.
