@@ -1,6 +1,5 @@
 #Spark With Scala And Docker
 
-1. Install Java
-2. Install Scala + SBT tool
-3. Download latest Spark binaries + compatible WinUtils (place them in the `spark_folder\bin`)
-4. Run 
+1. Run `init` to start docker.
+2. Run `build` to build project.
+3. Run `run` to run project in Spark.
