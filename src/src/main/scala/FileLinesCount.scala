@@ -12,7 +12,7 @@ object FileLinesCount {
     // Option 1: Build the parameters into a JDBC url to pass into the DataFrame APIs
     val jdbcUsername = "postgres"
     val jdbcPassword = ""
-    val jdbcHostname = "localhost"
+    val jdbcHostname = "postgres"
     val jdbcPort = 5432
     val jdbcDatabase ="postgres"
     val jdbcUrl = s"jdbc:postgresql://${jdbcHostname}:${jdbcPort}/${jdbcDatabase}?user=${jdbcUsername}&password=${jdbcPassword}"
@@ -38,6 +38,8 @@ object FileLinesCount {
       format("jdbc").
       options(opts).
       load
+
+    df.show(truncate = false)
 
     val fileName = args(0)
     val lines = sc.textFile(fileName).cache
