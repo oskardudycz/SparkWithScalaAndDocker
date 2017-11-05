@@ -1,4 +1,4 @@
-#Spark With Scala And Docker
+# Spark With Scala And Docker
 
 Project shows how to do simplest lines count in Spark
 
