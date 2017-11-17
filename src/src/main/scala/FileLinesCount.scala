@@ -2,6 +2,7 @@ package sparkWithScalaAndDocker
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
 import java.util.Properties
 import java.sql.DriverManager
 
@@ -19,7 +20,7 @@ object FileLinesCount {
 
     val opts = Map(
       "url" -> jdbcUrl,
-      "dbtable" -> "projects",
+      "dbtable" -> "import.instagram_media_recent",
       "driver" -> "org.postgresql.Driver"
     )
 
@@ -32,6 +33,8 @@ object FileLinesCount {
       .config("spark.driver.extraClassPath", "/app/postgresql-42.1.4.jar")
       .config("spark.executor.extraClassPath", "/app/postgresql-42.1.4.jar")
       .getOrCreate()
+
+    import spark.implicits._
     
     val df = spark.
       read.
@@ -39,7 +42,21 @@ object FileLinesCount {
       options(opts).
       load
 
-    df.show(truncate = false)
+    val jsons = df
+      .map(t => t.getString(2))
+
+    // load the jsons, infer the schema
+    val jsonResult = spark.read.json(jsons)
+      .select(explode($"data").alias("data"))
+      .select(
+        $"data.user.id".as("UserId"),
+        $"data.user.username".as("UserName"),
+        $"data.created_time".as("Created"),
+        $"data.location.latitude".as("Latitude"),
+        $"data.location.longitude".as("Longitude")
+      )
+      
+    jsonResult.show()
 
     val fileName = args(0)
     val lines = sc.textFile(fileName).cache

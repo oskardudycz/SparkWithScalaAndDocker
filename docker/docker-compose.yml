@@ -1,11 +1,13 @@
 version: "3"
 services:
     postgres: 
-        image: postgres
+        image: postgres:9.5
         environment:
             POSTGRES_PASSWORD:
         ports:
             - "5432:5432"
+        volumes:
+            - ./samples/:/docker-entrypoint-initdb.d/
     spark-master:
         build:   
             context: spark/builds/spark
