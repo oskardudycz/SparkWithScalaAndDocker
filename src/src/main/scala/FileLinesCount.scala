@@ -1,10 +1,13 @@
 package sparkWithScalaAndDocker
 
 import org.apache.spark.{SparkContext, SparkConf}
+import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.DataTypes._
 import java.util.Properties
 import java.sql.DriverManager
+import java.util.Properties
 
 object FileLinesCount {
   def main(args: Array[String]) {
@@ -23,6 +26,18 @@ object FileLinesCount {
       "dbtable" -> "import.instagram_media_recent",
       "driver" -> "org.postgresql.Driver"
     )
+
+    val connectionProperties = new Properties()
+    connectionProperties.put("user", jdbcUsername)
+    connectionProperties.put("password", jdbcPassword)
+    connectionProperties.put("driver", "org.postgresql.Driver")
+
+    val dataOpts = Map(
+      "url" -> jdbcUrl,
+      "dbtable" -> "data.UserLocation",
+      "driver" -> "org.postgresql.Driver"
+    )
+
 
     val conf = new SparkConf().setAppName("SparkWithScalaAndDocker Application")
     val sc = new SparkContext(conf)
@@ -49,14 +64,20 @@ object FileLinesCount {
     val jsonResult = spark.read.json(jsons)
       .select(explode($"data").alias("data"))
       .select(
-        $"data.user.id".as("UserId"),
+        monotonically_increasing_id().as("Id"),
+        $"data.user.id".cast(LongType).as("UserId"),
         $"data.user.username".as("UserName"),
-        $"data.created_time".as("Created"),
-        $"data.location.latitude".as("Latitude"),
-        $"data.location.longitude".as("Longitude")
+        from_unixtime($"data.created_time").as("Created"),
+        $"data.location.latitude".cast("decimal(9,6)").as("Latitude"),
+        $"data.location.longitude".cast("decimal(9,6)").as("Longitude")
       )
       
     jsonResult.show()
+
+    jsonResult
+      .write
+      .mode(SaveMode.Overwrite) // <--- Append to the existing table
+      .jdbc(jdbcUrl, "data.UserLocation", connectionProperties)
 
     val fileName = args(0)
     val lines = sc.textFile(fileName).cache
