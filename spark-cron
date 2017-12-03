@@ -1,0 +1,2 @@
+* * * * * root /usr/local/spark-2.2.0-bin-hadoop2.7/bin/spark-submit --packages org.postgresql:postgresql:42.1.4 --class sparkWithScalaAndDocker.Startup /app/target/scala-2.11/sparkwithscalaanddocker_2.11-0.1.jar /app/build.sbt >> /var/log/cron.log 2>&1
+# Don't remove the empty line at the end of this file. It is required to run the cron job
