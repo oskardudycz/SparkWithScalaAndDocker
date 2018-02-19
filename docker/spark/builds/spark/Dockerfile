@@ -35,8 +35,37 @@ ENV SPARK_HOME /usr/local/spark-2.2.0-bin-hadoop2.7
 ENV PATH $PATH:${SPARK_HOME}/bin
 RUN curl -s ${SPARK_ARCHIVE} | tar -xz -C /usr/local/
 
-
 # Add a /app volume
 VOLUME ["/app"]
+
+
+# Add postgres to classpath
+RUN \
+  cd /app \
+  wget http://central.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar
+
+  
+RUN \
+  cd /usr/local/spark-2.2.0-bin-hadoop2.7/bin \
+  wget http://central.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar
+
+ENV CLASSPATH $CLASSPATH:/app/postgresql-42.1.4.jar
+
+# Add crontab file in the cron directory
+ADD crontab /etc/cron.d/hello-cron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/hello-cron
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+#Install Cron
+RUN apt-get update
+RUN apt-get -y install cron
+
+
+# Run the command on container startup
+CMD touch /var/log/cron.log && cron && tail -f /var/log/cron.log
  
 WORKDIR $SPARK_HOME

@@ -1,0 +1,1 @@
+build && docker cp spark-cron docker_spark-master_1:/etc/cron.d/spark-instagram-cron && docker exec docker_spark-master_1  /bin/sh -c "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
