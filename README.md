@@ -27,3 +27,10 @@ Open cmd/shell:
 1. Run `init` to start docker (see details in [init.bat](https://github.com/oskardudycz/SparkWithScalaAndDocker/blob/master/init.bat)).
 2. Run `build` to build project (see details in [build.bat](https://github.com/oskardudycz/SparkWithScalaAndDocker/blob/master/build.bat)).
 3. Run `run` to run project in Spark (see details in [run.bat](https://github.com/oskardudycz/SparkWithScalaAndDocker/blob/master/run.bat))
+
+
+I found an issue or I have a change request
+--------------------------------
+Feel free to create an issue on GitHub. Contributions, pull requests are more than welcome!
+
+**Spark With Scala And Docker** is Copyright &copy; 2017-2018 [Oskar Dudycz](http://oskar-dudycz.pl) and other contributors under the [MIT license](LICENSE).
