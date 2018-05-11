@@ -22,6 +22,7 @@ object FileLinesCount {
   }
 }
 ```
+Install [Docker](https://www.docker.com/get-docker)
 
 Open cmd/shell:
 1. Run `init` to start docker (see details in [init.bat](https://github.com/oskardudycz/SparkWithScalaAndDocker/blob/master/init.bat)).
